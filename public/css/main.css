@@ -1,0 +1,38 @@
+.icon {
+	width: 24px;
+}
+a {
+	display: inline-block;
+	background: green;
+	z-index: 5;
+	border: solid 1px black;
+}
+/*.error {
+	border: 1px solid red;
+	content: 'error nose que'
+}
+*/
+.error{
+	display: none;
+	margin-left: 10px;
+}		
+
+.error_show{
+	color: red;
+	margin-left: 10px;
+}
+
+input.invalid, textarea.invalid{
+	border: 2px solid red;
+}
+
+input.valid, textarea.valid{
+	border: 2px solid green;
+}
+select.invalid, textarea.invalid{
+	border: 2px solid red;
+}
+
+select.valid, textarea.valid{
+	border: 2px solid green;
+}
