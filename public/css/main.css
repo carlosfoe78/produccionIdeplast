@@ -3,9 +3,9 @@
 }
 a {
 	display: inline-block;
-	background: green;
+	/*background: green;*/
 	z-index: 5;
-	border: solid 1px black;
+	/*border: solid 1px black;*/
 }
 /*.error {
 	border: 1px solid red;
@@ -16,6 +16,21 @@ a {
 	display: none;
 	margin-left: 10px;
 }		
+
+
+
+.msjError {
+	border-radius: 7px;
+	text-align: center;
+	font-weight: bold;
+	color: rgb(174, 3, 16);
+	background-color: rgb(250, 155, 162);
+	font-size: small;
+}
+.action {
+	min-width: 55px;
+	display: inline-block;
+}
 
 .error_show{
 	color: red;

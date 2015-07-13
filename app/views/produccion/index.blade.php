@@ -2,7 +2,7 @@
 
 @section('script')
     {{HTML::script('js/main.js')}}
-    {{HTML::script('js/mainValidate.js')}}
+    {{HTML::script('js/validate.js')}}
 @stop
 @section('content')
 <div class="header">
@@ -11,21 +11,21 @@
     @endif
     <span>Seleccione hora:  </span> {{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasP'))}}
 </div>
-<table id="tbldata" class="">
+<table id="tbldata" class="table table-hover table-condensed table-responsive">
     <tbody>
     </tbody>
     <tfoot>
     	<form method= "POST" action="" id="formProd">
     		<tr>
-    			<td>{{Form::label('lblFecha', date('Y-m-d'), array('id'=>'lblFecha'))}}</td>
-    			<td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHoras'))}}</td>
-    			<td>{{Form::select('ddlEmpleados', $listEmpleados,null, array('id'=>'ddlEmpleados'))}}</td>
-    			<td>{{Form::select('ddlProduccion', $listProduccion,null, array('id'=>'ddlProduccion'))}}</td>
-    			<td>{{Form::select('ddlProcesos', $listProcesos,null, array('id'=>'ddlProcesos'))}}</td>
-    			<td>{{Form::text('txtTiempo',null, array('id'=>'txtTiempo'))}}</td>
-    			<td>{{Form::text('txtCantidad', null, array('id'=>'txtCantidad'))}}</td>
+    			<td>{{Form::label('lblFecha', date('Y-m-d'), array('id'=>'lblFecha', 'class'=>'form-control'))}}</td>
+    			<td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHoras', 'class'=>'form-control'))}}</td>
+    			<td>{{Form::select('ddlEmpleados', $listEmpleados,null, array('id'=>'ddlEmpleados', 'class'=>'form-control'))}}</td>
+    			<td>{{Form::select('ddlProduccion', $listProduccion,null, array('id'=>'ddlProduccion', 'class'=>'form-control'))}}</td>
+    			<td>{{Form::select('ddlProcesos', $listProcesos,null, array('id'=>'ddlProcesos', 'class'=>'form-control'))}}</td>
+    			<td>{{Form::text('txtTiempo',null, array('id'=>'txtTiempo' , 'class'=>'form-control'))}}</td>
+    			<td>{{Form::text('txtCantidad', null, array('id'=>'txtCantidad', 'class'=>'form-control'))}}</td>
                 <td><a href="#" class="add"><img src="images/add-icon.png" class="icon"></a>
-                    {{Form::submit('Agregar', array('id'=>"btnAdd"))}}
+                    {{Form::submit('Agregar', array('id'=>"btnAdd", 'style'=>"display: none;"))}}
                 </td>
     		</tr>
     	{{Form::close()}}
@@ -43,39 +43,39 @@
             </div>
             <div class="modal-body">
                 <table class="editTable">
-                    {{Form::hidden('txtId',null, array('id'=>'txtId'))}}
+                    {{Form::hidden('txtId',null, array('id'=>'txtId', 'class'=>'form-group'))}}
                     <tr>
-                        <td>Fecha</td>
-                        <td>{{Form::label('lblFecha', null, array('id'=>'lblFechaEdit'))}}</td>
+                        <td><label class="form-control">Fecha</label></td>
+                        <td>{{Form::label('lblFecha', null, array('id'=>'lblFechaEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Hora</td>
-                        <td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasEdit'))}}</td>
+                        <td><label class="form-control">Hora</label></td>
+                        <td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Empleado</td>
-                        <td>{{Form::select('ddlEmpleados', $listEmpleados,null, array('id'=>'ddlEmpleadosEdit'))}}</td>
+                        <td><label class="form-control">Empleado</label></td>
+                        <td>{{Form::select('ddlEmpleados', $listEmpleados,null, array('id'=>'ddlEmpleadosEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Producción</td>
-                        <td>{{Form::select('ddlProduccion', $listProduccion,null, array('id'=>'ddlProduccionEdit'))}}</td>
+                        <td><label class="form-control">Producción</label></td>
+                        <td>{{Form::select('ddlProduccion', $listProduccion,null, array('id'=>'ddlProduccionEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Proceso</td>
-                        <td>{{Form::select('ddlProcesos', $listProcesos,null, array('id'=>'ddlProcesosEdit'))}}</td>
+                        <td><label class="form-control">Proceso</label></td>
+                        <td>{{Form::select('ddlProcesos', $listProcesos,null, array('id'=>'ddlProcesosEdit','class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Tiempo</td>
-                        <td>{{Form::text('txtTiempo',null, array('id'=>'txtTiempoEdit'))}}</td>
+                        <td><label class="form-control">Tiempo<label></td>
+                        <td>{{Form::text('txtTiempo',null, array('id'=>'txtTiempoEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Cantidad</td>
-                        <td>{{Form::text('txtCantidad', null, array('id'=>'txtCantidadEdit'))}}</td>
+                        <td><label class="form-control">Cantidad</label></td>
+                        <td>{{Form::text('txtCantidad', null, array('id'=>'txtCantidadEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-default btn-prod-close" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary btnEdit">Guardar</button>
         </div>
     </div>
@@ -93,35 +93,35 @@
             <div class="modal-body">
                 <table class="editTable">
                     <tr>
-                        <td>Fecha</td>
-                        <td>{{Form::label('lblFecha', date('Y-m-d'), array('id'=>'lblFechaTaller'))}}</td>
+                        <td><label class="form-control">Fecha</label> </td>
+                        <td>{{Form::label('lblFecha', date('Y-m-d'), array('id'=>'lblFechaTaller', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Hora</td>
-                        <td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasTaller'))}}</td>
+                        <td><label class="form-control">Hora</label></td>
+                        <td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasTaller','class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Empleado</td>
+                        <td><label class="form-control">Empleado</label></td>
                         <td>{{Form::select('ddlEmpleados', 
                             array('5'=>'MARTIN LEONCIO RAMIREZ', '23' => 'NELSON DE JESUS VELEZ'),null, 
-                            array('id'=>'ddlEmpleadosTaller'))}}
+                            array('id'=>'ddlEmpleadosTaller', 'class'=>'form-control'))}}
                         </td>
                     </tr>
                     <tr>
-                        <td>Producción</td>
-                        <td>{{Form::text('txtProduccionTaller', null, array('id'=>'txtProduccionTaller'))}}</td>
+                        <td><label class="form-control"> Producción</label> </td>
+                        <td>{{Form::text('txtProduccionTaller', null, array('id'=>'txtProduccionTaller', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Proceso</td>
-                        <td>{{Form::textarea('txtProcesoTaller', null, array('id'=>'txtProcesoTaller'))}}</td>
+                        <td><label class="form-control">Proceso</label></td>
+                        <td>{{Form::textarea('txtProcesoTaller', null, array('id'=>'txtProcesoTaller', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Tiempo</td>
-                        <td>{{Form::text('txtTiempoTaller',null, array('id'=>'txtTiempoTaller'))}}</td>
+                        <td><label class="form-control">Tiempo</label></td>
+                        <td>{{Form::text('txtTiempoTaller','60', array('id'=>'txtTiempoTaller', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Cantidad</td>
-                        <td>{{Form::text('txtCantidadTaller', '0', array('id'=>'txtCantidadTaller'))}}</td>
+                        <td><label class="form-control">Cantidad</label></td>
+                        <td>{{Form::text('txtCantidadTaller', '0', array('id'=>'txtCantidadTaller', 'class'=>'form-control'))}}</td>
                     </tr>
                 </table>
             </div>
@@ -143,37 +143,37 @@
             </div>
             <div class="modal-body">
                 <table class="editTable">
-                    {{Form::hidden('txtIdTaller',null, array('id'=>'txtIdTaller'))}}
+                    {{Form::hidden('txtIdTaller',null, array('id'=>'txtIdTaller', 'class'=>'form-control'))}}
                     <tr>
-                        <td>Fecha</td>
-                        <td>{{Form::label('lblFecha', date('Y-m-d'), array('id'=>'lblFechaTallerEdit'))}}</td>
+                        <td><label class="form-control">Fecha</label></td>
+                        <td>{{Form::label('lblFecha', date('Y-m-d'), array('id'=>'lblFechaTallerEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Hora</td>
-                        <td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasTallerEdit'))}}</td>
+                        <td><label class="form-control">Hora</label></td>
+                        <td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasTallerEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Empleado</td>
+                        <td><label class="form-control">Empleado<label></td>
                         <td>{{Form::select('ddlEmpleados', 
                             array('5'=>'MARTIN LEONCIO RAMIREZ', '23' => 'NELSON DE JESUS VELEZ'),null, 
-                            array('id'=>'ddlEmpleadosTallerEdit'))}}
+                            array('id'=>'ddlEmpleadosTallerEdit', 'class'=>'form-control'))}}
                         </td>
                     </tr>
                     <tr>
-                        <td>Producción</td>
-                        <td>{{Form::text('txtProduccionTaller', null, array('id'=>'txtProduccionTallerEdit'))}}</td>
+                        <td><label class="form-control">Producción</label></td>
+                        <td>{{Form::text('txtProduccionTaller', null, array('id'=>'txtProduccionTallerEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Proceso</td>
-                        <td>{{Form::textarea('txtProcesoTaller', null, array('id'=>'txtProcesoTallerEdit'))}}</td>
+                        <td><label class="form-control">Proceso<label></td>
+                        <td>{{Form::textarea('txtProcesoTaller', null, array('id'=>'txtProcesoTallerEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Tiempo</td>
-                        <td>{{Form::text('txtTiempoTaller',null, array('id'=>'txtTiempoTallerEdit'))}}</td>
+                        <td><label class="form-control">Tiempo</label></td>
+                        <td>{{Form::text('txtTiempoTaller',null, array('id'=>'txtTiempoTallerEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                     <tr>
-                        <td>Cantidad</td>
-                        <td>{{Form::text('txtCantidadTaller', '0', array('id'=>'txtCantidadTallerEdit'))}}</td>
+                        <td><label class="form-control">Cantidad</label></td>
+                        <td>{{Form::text('txtCantidadTaller', '0', array('id'=>'txtCantidadTallerEdit', 'class'=>'form-control'))}}</td>
                     </tr>
                 </table>
             </div>

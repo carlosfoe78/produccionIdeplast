@@ -2,7 +2,6 @@ $(document).ready(function() {
 
 	load();//inicar la tabla
 
-	
 	$('.add').click(function() {
 		//document.forms["formProd"].submit();
 		//add();
@@ -12,161 +11,236 @@ $(document).ready(function() {
 
 	$('#formProd').submit(function(event) {
 		event.preventDefault();
-		//console.log(validate());
-		if (validate()){
-			//add();
-			console.log('enviar');
+		console.log(validateProdInput());
+		if (!validateProdInput()){
+			add();
 		}
 	});
 
-	{
-		$('.btnGuardarTaller').click(function() {
+	$('.btnGuardarTaller').click(function() {
+		//alert('clic guardar taller');
+		if(!validateTallerInput()){
 			addTaller();
 			$('#modalTaller').modal('hide');
-			clearTaller();
-		});
+			cleanTaller();
+		}
+	});
 
-		$('.btnEdit').click(function(event) {
+	$('.btnEdit').click(function(event) {
+		if(!validateProdEdit()){
 			saveEdit();
 			$('#modalEdit').modal('hide');
-		});
-		$('.btnGuardarTallerEdit').click(function(event) {
+		}
+	});
+
+	$('.btn-prod-close').click(function (){
+		cleanProdEdit();
+	});
+
+	$('.btn-taller-close').click(function (){
+		cleanTaller();	
+	});
+
+	$('.btnGuardarTallerEdit').click(function(event) {
+		if(!validateTallerEdit()){
 			saveEditTaller();
 			$('#modalTallerEdit').modal('hide');
-		});
-		$('#calendaro').datepicker({            
-	          dateFormat:'yy-mm-dd',
-	          defaultDate: Date.now()
-	    });
-	     
-	    $('#ddlHorasP').change(function(event) {
-	     	idHora = $(this).val();
-	     	load();
-	     	$('#ddlHoras').val(idHora);
-	    });	
+			cleanTaller();
+		}
+	});
 
-	    $('.btnTaller').click(function(event) {
-	     	$('#modalTaller').modal('show');
-	    });
-	}
+	$('#calendaro').datepicker({
+		dateFormat:'yy-mm-dd',
+		defaultDate: Date.now()
+	});
 
-	//interaccion de elementos del formulario
-	{
-		// Quitar mensaje de error cuando las listas desplegables cambien
+	$('#ddlHorasP').change(function(event) {
+		idHora = $(this).val();
+		load();
+		$('#ddlHoras').val(idHora);
+	});	
 
-		$("select").change(function (){
-			var obj = $(this).next();
-			if (typeof obj[0] != 'undefined'){
-				if(obj[0].className=="msjError"){
-					$(this).next().remove();
-				}
-			}		
-		});
-
-		//quitar mensaje de error cuando se inserten datos
-		$(':text').keyup(function (){
-			var obj = $(this).next();
-			if (typeof obj[0] != 'undefined'){
-				if(obj[0].className=="msjError"){
-					$(this).next().remove();
-				}
-			}		
-		});
-	}
-
+	$('.btnTaller').click(function(event) {
+		$('#modalTaller').modal('show');
+	});
 
 });
 
 
-function msjError(id, msj){
-	$("<div class='msjError'>"+msj+"</div>").insertAfter( id );
+function validateProdInput(){
+ 	
+ 	var error = false;	
+	var invalid = false;
+	
+	
+	invalid = validateField(
+		'ddlEmpleados',
+		[fieldCondition("required",true,"Debe seleccionar un empleado")]
+		);
+	
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'ddlProcesos',
+		[fieldCondition("required",true,"* Debe seleccionar un proceso")]
+	);
+	
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtTiempo',
+		[
+			fieldCondition("required",true,"* Campo requerido"),
+			fieldCondition("numeric", 1,"El valor debe ser un número"),
+			fieldCondition("min", 1,"El tiempo debe ser mayor que 0 min"),
+			fieldCondition("max", 60,"El tiempo no puede ser superior a 60 min")
+		]
+	);
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtCantidad',
+		[
+			fieldCondition("required",true,"* Campo requerido"),
+			fieldCondition("numeric", 1,"El valor debe ser un número"),
+			fieldCondition("min", 0,"la cantidad no puede ser inferio a 0"),
+		]
+	);
+	if(invalid && !error){error=true;}
+
+	return error;
 }
 
-function validate() {
-
-	var error = false;
-	var focus = false;
-
-	var validate = {};
-	validate.empleado  = $("#ddlEmpleados").val();
-	validate.produccion = $("#ddlProduccion").val();
-	validate.proceso = $("#ddlProcesos").val();
-	validate.tiempo = $("#txtTiempo").val();
-	validate.cantidad = $("#txtCantidad").val();
-
+function validateProdEdit(){
+ 	
+ 	var error = false;	
+	var invalid = false;
 	
-	//validacion campo empleado
-	if(validate.empleado == "0"){
-		error = true;
-		console.log("debe seleccionar un empleado");
-		msjError("#ddlEmpleados","Debe seleccionar un empleado");
-		if(!focus){
-			$('#ddlEmpleados').focus();
-			focus = true;
-		}
-	}
+	
+	invalid = validateField(
+		'ddlEmpleadosEdit',
+		[fieldCondition("required",true,"Debe seleccionar un empleado")]
+		);
+	
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'ddlProcesosEdit',
+		[fieldCondition("required",true,"* Debe seleccionar un proceso")]
+	);
+	
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtTiempoEdit',
+		[
+			fieldCondition("required",true,"* Campo requerido"),
+			fieldCondition("numeric", 1,"El valor debe ser un número"),
+			fieldCondition("min", 1,"El tiempo debe ser mayor que 0 min"),
+			fieldCondition("max", 60,"El tiempo no puede ser superior a 60 min")
+		]
+	);
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtCantidadEdit',
+		[
+			fieldCondition("required",true,"* Campo requerido"),
+			fieldCondition("numeric", 1,"El valor debe ser un número"),
+			fieldCondition("min", 0,"la cantidad no puede ser inferio a 0"),
+		]
+	);
+	if(invalid && !error){error=true;}
 
-	//validacion campo proceso
-	if(validate.proceso == "0"){
-		error = true;
-		ddlProcesos
-		console.log("debe seleccionar un proceso");
-		msjError("#ddlProcesos","debe seleccionar un proceso");
-		if(!focus){
-			$('#ddlProcesos').focus();
-			focus = true;
-		}
-	}
+	return error;
+}
 
+function validateTallerInput(){
+ 	
+ 	var error = false;	
+	var invalid = false;
+	
+	
+	invalid = validateField(
+		'ddlEmpleadosTaller',
+		[fieldCondition("required",true,"Debe seleccionar un empleado")]
+		);
+	
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtProcesoTaller',
+		[fieldCondition("required",true,"* Debe indicar al menos un proceso")]
+	);
+	
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtTiempoTaller',
+		[
+			fieldCondition("required",true,"* Campo requerido"),
+			fieldCondition("numeric", 1,"El valor debe ser un número"),
+			fieldCondition("min", 1,"El tiempo debe ser mayor que 0 min"),
+			fieldCondition("max", 60,"El tiempo no puede ser superior a 60 min")
+		]
+	);
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtCantidadTaller',
+		[
+			fieldCondition("required",true,"* Campo requerido"),
+			fieldCondition("numeric", 1,"El valor debe ser un número"),
+			fieldCondition("min", 0,"la cantidad no puede ser inferio a 0"),
+		]
+	);
+	if(invalid && !error){error=true;}
 
-	//validacion campo de tiempo
-	if(validate.tiempo == "null" || validate.tiempo == "") {
-		error = true;
-		msjError("#txtTiempo","tiempo en blanco");
-		console.log('tiempo en blanco');
-		if(!focus){
-			$('#txtTiempo').focus();
-			focus = true;
-		}
-		
-	}else{
-		if (parseInt(validate.tiempo)<0 || parseInt(validate.tiempo)>60){
-			error = true;
-			console.log('tiempo fuera de rango');
-			msjError("#txtTiempo","tiempo fuera de rango");
-			if(!focus){
-				$('#txtTiempo').focus();
-				focus = true;
-			}
-		}
-	}
+	return error;
+}
 
-	//validacion campo cantidad
-	if(validate.cantidad == "null" || validate.cantidad == ""){
-		error = true;
-		console.log('');
-		msjError("#txtCantidad","cantidad en blanco");
-		if(!focus){
-			$('#txtCantidad').focus();
-			focus = true;
-		}
-	}else{
-		if (parseInt(validate.cantidad)<0){
-			error = true;
-			console.log('cantidad fuera de rango');
-			msjError("#txtCantidad","cantidad fuera de rango");
-			if(!focus){
-				$('#txtCantidad').focus();
-				focus = true;
-			}
-		}
-	}
+function validateTallerEdit(){
+ 	
+ 	var error = false;	
+	var invalid = false;
+	
+	
+	invalid = validateField(
+		'ddlEmpleadosTallerEdit',
+		[fieldCondition("required",true,"Debe seleccionar un empleado")]
+		);
+	
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtProcesoTallerEdit',
+		[fieldCondition("required",true,"* Debe indicar al menos un proceso")]
+	);
+	
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtTiempoTallerEdit',
+		[
+			fieldCondition("required",true,"* Campo requerido"),
+			fieldCondition("numeric", 1,"El valor debe ser un número"),
+			fieldCondition("min", 1,"El tiempo debe ser mayor que 0 min"),
+			fieldCondition("max", 60,"El tiempo no puede ser superior a 60 min")
+		]
+	);
+	if(invalid && !error){error=true;}
+	
+	invalid = validateField(
+		'txtCantidadTallerEdit',
+		[
+			fieldCondition("required",true,"* Campo requerido"),
+			fieldCondition("numeric", 1,"El valor debe ser un número"),
+			fieldCondition("min", 0,"la cantidad no puede ser inferio a 0"),
+		]
+	);
+	if(invalid && !error){error=true;}
 
-
-	if (error){
-		return false;
-	}
-	return true;
+	return error;
 }
 
 /**
@@ -184,7 +258,7 @@ function load()
 	})
 	.done(function(data) {
 		makeTable(data);
-		clean();
+		cleanProdInput();
 	});
 	
 }
@@ -210,8 +284,10 @@ function makeTable(data)
 			+data[i].inttiempo_dat+'</td><td>'
 			+data[i].intcantidad_dat+'</td>';
 		if(data[i].ident==1){
-			row+='<td><a href="" id='+data[i].id_dat+' class="edit"><img src="images/edit-icon.png" class="icon"></a>'
-			+'<a href="" id="'+data[i].id_dat+'" class="delete"><img src="images/delete-icon.png" class="icon"></a></td></tr>';
+			row+='<td><div class="action">'
+					+'<a href="" id='+data[i].id_dat+' class="edit"><img src="images/edit-icon.png" class="icon"></a>'
+					+'<a href="" id="'+data[i].id_dat+'" class="delete"><img src="images/delete-icon.png" class="icon"></a>'
+					+'</div></td></tr>';
 		}else
 		{
 			row+='<td><a href="" id='+data[i].id_dat+' class="editTaller"><img src="images/edit-icon.png" class="icon"></a>'
@@ -259,16 +335,6 @@ function makeTable(data)
 function clearTable()
 {
 	$('#tbldata tbody').empty();	
-}
-function valRequired(field)
-{
-	var val = $("#".field).val();
-	if(val==null || vall==''){
-		console.log('El campo es requerido');
-		$("#".field).addClass('error');
-		return;
-	}
-
 }
 
 /**
@@ -342,7 +408,7 @@ function saveEdit()
 		url: 'prod/update',
 		type: 'POST',
 		data: {
-			fecha: fecha, 
+			fecha: $("#lblFechaEdit").html(), 
 			hora: $('#ddlHorasEdit').val(), 
 			empleado: $('#ddlEmpleadosEdit').val(), 
 			produccion: $('#ddlProduccionEdit').val(), 
@@ -387,13 +453,28 @@ function deleteReg(id)
 /**
 * funcion para limpar el formulario de recoleccion de datos de produccion
 */
-function clean()
+function cleanProdInput()
 {
+
 	$('#ddlEmpleados').focus();
-	$('#txtTiempoEdit').val('');
-	$('#txtCantidadEdit').val('');
 	$('#txtTiempo').val('');
 	$('#txtCantidad').val('');
+	$('#txtTiempo').val('');
+	$('#txtCantidad').val('');
+
+	cleanAllErrors();
+}
+
+function cleanProdEdit()
+{
+
+	$('#ddlEmpleadosEdit').focus();
+	$('#txtTiempoEdit').val('');
+	$('#txtCantidadEdit').val('');
+	$('#txtTiempoEdit').val('');
+	$('#txtCantidadEdit').val('');
+
+	cleanAllErrors();
 }
 
 //--------------------- funciones para la section de Taller ---------------------------
@@ -405,6 +486,7 @@ function addTaller()
 	empleado = $('#ddlEmpleadosTaller').val();
 	produccion = $('#txtProduccionTaller').val();
 	proceso = $('#txtProcesoTaller').val();
+	proceso = proceso.replace(/(\r\n|\n|\r)/gm,"<br>");
 	tiempo = $('#txtTiempoTaller').val();
 	cantidad =$('#txtCantidadTaller').val();
 
@@ -432,14 +514,17 @@ function loadDataEditTaller(id)
 	})
 	.done(function(data) {
 
+		var proceso = data.data.proceso;
+		//proceso = proceso.replace(/</br>/gi,"\n");
+		proceso= proceso.replace(/<br>/gi, "\n");
 		$('#lblFechaTallerEdit').html(data.data.fecha);
 		$('#ddlHorasTallerEdit').val(data.data.hora);
 		$('#ddlEmpleadosTallerEdit').val(data.data.empleado);
 		$('#txtProduccionTallerEdit').val(data.data.produccion);
-		$('#txtProcesoTallerEdit').val(data.data.proceso);
+		$('#txtProcesoTallerEdit').val(proceso);
 		$('#txtTiempoTallerEdit').val(data.data.tiempo);
 		$('#txtCantidadTallerEdit').val(data.data.cantidad);
-		$('#txtIdTaller').val(id);		
+		$('#txtIdTaller').val(id);
 	})
 	.fail(function() {
 		alert('Ocurrio un error al intentrar traer los datos a modificar, verifique la conexión');
@@ -449,6 +534,8 @@ function loadDataEditTaller(id)
 
 function saveEditTaller()
 {
+	var proceso = $('#txtProcesoTallerEdit').val(), 
+	proceso = proceso.replace(/(\r\n|\n|\r)/gm,"<br>");
 	$.ajax({
 		url: 'taller/update',
 		type: 'POST',
@@ -457,10 +544,10 @@ function saveEditTaller()
 			hora: $('#ddlHorasTallerEdit').val(), 
 			empleado: $('#ddlEmpleadosTallerEdit').val(), 
 			produccion: $('#txtProduccionTallerEdit').val(), 
-			proceso: $('#txtProcesoTallerEdit').val(), 
+			proceso: proceso, 
 			tiempo: $('#txtTiempoTallerEdit').val(), 
 			cantidad: $('#txtCantidadEdit').val(),
-			id: $('#txtCantidadTallerEdit').val()
+			id: $('#modalTallerEdit input[type=hidden]').val()
 		},
 	})
 	.done(function() {
@@ -490,7 +577,14 @@ function deleteRegTaller(id)
 function cleanTaller(){
 	$('#txtProduccionTaller').val(''); 
 	$('#txtProcesoTaller').val('');
-	$('#txtTiempoTaller').val('');
-	$('#txtCantidad').val('');
+	$('#txtTiempoTaller').val('60');
+	$('#txtCantidad').val('0');
+
+	$('#txtProduccionTallerEdit').val('');
+	$('#txtProcesoTallerEdit').val('');
+	$('#txtTiempoTallerEdit').val('');
+	$('#txtCantidadTallerEdit').val('');
+
+	cleanAllErrors();
 }
 
