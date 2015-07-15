@@ -151,4 +151,19 @@ class RegistroProduccionController extends Controller
     }
     return  $list;
   }
+
+  function postEsperado()
+  {
+    $idProduccion = Input::get('idProduccion');
+    $idProceso = Input::get('idProceso');
+
+    $result = DB::select('call ups_buscarRendimientoProcesoXProd(?,?)',array($idProduccion,$idProceso));
+    //$result = DB::select('call ups_buscarRendimientoProcesoXProd(4293,2)');
+    if(isset($result[0]))
+    {
+      $esperado=$result[0]->esperado;
+      return Response::json(array('success'=>true,'esperado'=> $esperado));
+    }
+    return Response::json(array('success'=>false));
+  }
 }

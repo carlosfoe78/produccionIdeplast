@@ -2,6 +2,7 @@ $(document).ready(function() {
 
 	load();//inicar la tabla
 
+	//simulacion de envio de formulario
 	$('.add').click(function() {
 		//document.forms["formProd"].submit();
 		//add();
@@ -9,6 +10,7 @@ $(document).ready(function() {
 		document.getElementById("btnAdd").click();
 	});
 
+	//agregar un regsitro de produccion
 	$('#formProd').submit(function(event) {
 		event.preventDefault();
 		console.log(validateProdInput());
@@ -17,6 +19,7 @@ $(document).ready(function() {
 		}
 	});
 
+	//agregar un registro de taller
 	$('.btnGuardarTaller').click(function() {
 		//alert('clic guardar taller');
 		if(!validateTallerInput()){
@@ -26,6 +29,7 @@ $(document).ready(function() {
 		}
 	});
 
+	//editar un registro de produccion
 	$('.btnEdit').click(function(event) {
 		if(!validateProdEdit()){
 			saveEdit();
@@ -33,14 +37,17 @@ $(document).ready(function() {
 		}
 	});
 
+	//limpiar formulario de produccion al cerrar
 	$('.btn-prod-close').click(function (){
 		cleanProdEdit();
 	});
 
+	//limpiar formulario de produccion al cerrar
 	$('.btn-taller-close').click(function (){
 		cleanTaller();	
 	});
 
+	//guardar cambio en un registro editato taller
 	$('.btnGuardarTallerEdit').click(function(event) {
 		if(!validateTallerEdit()){
 			saveEditTaller();
@@ -58,7 +65,18 @@ $(document).ready(function() {
 		idHora = $(this).val();
 		load();
 		$('#ddlHoras').val(idHora);
+	});
+
+	$('#ddlProcesos').change(function(event) {
+		var idProceso = $(this).val();
+		var idProduccion = $('#ddlProduccion').val();
+		getEsperadoProceso(idProduccion,idProceso);
 	});	
+	$('#ddlProduccion').change(function(){
+		var idProceso = $('#ddlProcesos').val();
+		var idProduccion = $(this).val();
+		getEsperadoProceso(idProduccion,idProceso);
+	});
 
 	$('.btnTaller').click(function(event) {
 		$('#modalTaller').modal('show');
@@ -588,3 +606,27 @@ function cleanTaller(){
 	cleanAllErrors();
 }
 
+function getEsperadoProceso(idProduccion, idProceso)
+{
+	var respuesta;
+	$.ajax({
+		url: 'prod/esperado',
+		type: 'POST',
+		dataType: 'json',
+		data: {idProduccion: idProduccion, idProceso:idProceso},
+	})
+	.done(function(data) {
+		if(data.success)
+		{
+			$('#txtCantidad').attr("placeholder", "Esperado "+data.esperado);
+		}
+		else
+		{
+			$('#txtCantidad').attr("placeholder", "Esperado 0");
+		}
+	})
+	.fail(function() {
+		//console.log("error");
+		alert('Ocurrio al intentar borrar el registro, verifique la conexión')
+	});
+}
