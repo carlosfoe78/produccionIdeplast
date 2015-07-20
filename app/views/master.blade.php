@@ -7,11 +7,11 @@
 	{{HTML::script('bootstrap-3.3.2/js/bootstrap.min.js')}}
 	{{HTML::script('js/jquery-ui.js')}}
 	{{HTML::script('js/jquery.validate.js')}}
-
+	@yield('script')
 	{{HTML::style('bootstrap-3.3.2/css/bootstrap.css')}}
 	{{HTML::style('css/jquery-ui.css')}}
 	{{HTML::style('css/main.css')}}
-	@yield('script')
+	@yield('style')
 </head>
 <body>
 	@yield('content')

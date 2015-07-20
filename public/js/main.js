@@ -13,7 +13,6 @@ $(document).ready(function() {
 	//agregar un regsitro de produccion
 	$('#formProd').submit(function(event) {
 		event.preventDefault();
-		console.log(validateProdInput());
 		if (!validateProdInput()){
 			add();
 		}
@@ -79,9 +78,9 @@ $(document).ready(function() {
 	});
 
 	$('.btnTaller').click(function(event) {
+		$('#ddlHorasTaller').val($('#ddlHorasP').val());
 		$('#modalTaller').modal('show');
 	});
-
 });
 
 
@@ -324,10 +323,12 @@ function makeTable(data)
 	$('.delete').click(function(event) {
 		event.preventDefault();
 		id= $(this).attr('id');
-		if(confirm('¿Seguro desea borrar este registro?'))
-		{
-			deleteReg(id);
-		}
+
+		alertify.confirm('¿Seguro desea borrar este registro?', function (e) {
+    if (e) {
+        deleteReg(id);
+    	}
+		});
 	});
 
 	$('.editTaller').click(function(event) {
@@ -339,10 +340,11 @@ function makeTable(data)
 	$('.deleteTaller').click(function(event) {
 		event.preventDefault();
 		id= $(this).attr('id');
-		if(confirm('¿Seguro desea borrar este registro?'))
-		{
-			deleteRegTaller(id);
-		}
+		alertify.confirm('¿Seguro desea borrar este registro?', function (e) {
+    if (e) {
+        deleteReg(id);
+    	}
+		});
 	});
 }
 
@@ -378,6 +380,10 @@ function add()
 		data: {fecha: fecha, hora: hora, empleado: empleado, produccion: produccion, proceso: proceso, tiempo: tiempo, cantidad: cantidad},
 	})
 	.done(function(data) {
+		if(!data.success)
+		{
+			alertify.alert(data.error.mensaje+'<br>'+'El número total de minutos seria de '+data.error.total);
+		}
 		load();
 	})
 	.fail(function() {
@@ -436,7 +442,11 @@ function saveEdit()
 			id: $('#modalEdit input[type=hidden]').val()
 		},
 	})
-	.done(function() {
+	.done(function(data) {
+		if(!data.success)
+		{
+			alertify.alert(data.error.mensaje+'<br>'+'El número total de minutos seria de '+data.error.total);
+		}
 		load();
 	})
 	.fail(function() {
@@ -515,6 +525,10 @@ function addTaller()
 		data: {fecha: fecha, hora: hora, empleado: empleado, produccion: produccion, proceso: proceso, tiempo: tiempo, cantidad: cantidad},
 	})
 	.done(function(data) {
+		if(!data.success)
+		{
+			alertify.alert(data.error.mensaje+'<br>'+'El número total de minutos seria de '+data.error.total);
+		}
 		load();
 	})
 	.fail(function() {
@@ -569,6 +583,10 @@ function saveEditTaller()
 		},
 	})
 	.done(function() {
+		if(!data.success)
+		{
+			alertify.alert(data.error.mensaje+'<br>'+'El número total de minutos seria de '+data.error.total);
+		}
 		load();
 	})
 	.fail(function() {
@@ -618,11 +636,11 @@ function getEsperadoProceso(idProduccion, idProceso)
 	.done(function(data) {
 		if(data.success)
 		{
-			$('#txtCantidad').attr("placeholder", "Esperado "+data.esperado);
+			$('#txtCantidad').attr("placeholder", data.esperado+" Esperado ");
 		}
 		else
 		{
-			$('#txtCantidad').attr("placeholder", "Esperado 0");
+			$('#txtCantidad').attr("placeholder", "0 Esperado");
 		}
 	})
 	.fail(function() {

@@ -3,13 +3,28 @@
 @section('script')
     {{HTML::script('js/main.js')}}
     {{HTML::script('js/validate.js')}}
+    {{HTML::script('js/alertify.js')}}
+@stop
+@section('style')
+    {{HTML::style('css/alertify-bootstrap-3.css')}}
 @stop
 @section('content')
 <div class="header">
-    @if(false)
-    {{Form::text('fecha', date('Y-m-d'), array('id'=>'calendaro'))}}
-    @endif
-    <span>Seleccione hora:  </span> {{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasP'))}}
+    <div class="form-inline">
+        @if(false)
+        <div class="form-group">
+        
+        <span class="form-control">Fecha Inicial</span>
+        {{Form::text('fecha1', date('Y-m-d'), array('id'=>'calendaro1','class'=>'form-control'))}}    
+        </div>
+        <div class="form-group">
+        <span class="form-control">Fecha Final</span>
+        {{Form::text('fecha2', date('Y-m-d'), array('id'=>'calendaro2', 'class'=>'form-control'))}}
+        </div>
+        <span class="form-control">Seleccione hora:  </span> {{Form::select('ddlHoras2', $listHoras,null ,array('id'=>'ddlHorasP2','class'=>'form-control'))}}
+        @endif
+        <span  class="form-control">Seleccione hora:  </span> {{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHorasP','class'=>'form-control'))}}
+    </div>
 </div>
 <table id="tbldata" class="table table-hover table-condensed table-responsive">
     <tbody>
@@ -18,7 +33,7 @@
     	<form method= "POST" action="" id="formProd">
     		<tr>
     			<td>{{Form::label('lblFecha', date('Y-m-d'), array('id'=>'lblFecha', 'class'=>'form-control'))}}</td>
-    			<td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHoras', 'class'=>'form-control'))}}</td>
+    			<td>{{Form::select('ddlHoras', $listHoras,null ,array('id'=>'ddlHoras', 'class'=>'form-control', ' disabled'=>true))}}</td>
     			<td>{{Form::select('ddlEmpleados', $listEmpleados,null, array('id'=>'ddlEmpleados', 'class'=>'form-control'))}}</td>
     			<td>{{Form::select('ddlProduccion', $listProduccion,null, array('id'=>'ddlProduccion', 'class'=>'form-control'))}}</td>
     			<td>{{Form::select('ddlProcesos', $listProcesos,null, array('id'=>'ddlProcesos', 'class'=>'form-control'))}}</td>
@@ -126,7 +141,7 @@
                 </table>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-default btn-taller-close" data-dismiss="modal">Cerrar</button>
                 <button type="button" class="btn btn-primary btnGuardarTaller">Guardar</button>
         </div>
     </div>

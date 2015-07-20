@@ -7,11 +7,22 @@ a {
 	z-index: 5;
 	/*border: solid 1px black;*/
 }
-/*.error {
-	border: 1px solid red;
-	content: 'error nose que'
+
+body{
+	margin: 2% 1%;
 }
-*/
+
+
+.header {
+	background-color: #0971B2;
+	padding:  5px;
+	border-radius: 5px;
+	/* margin: 10px 10px 10px 10px; */
+}
+
+.form-inline {
+	margin: auto;
+}
 .error{
 	display: none;
 	margin-left: 10px;
