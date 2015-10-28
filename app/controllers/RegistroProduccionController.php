@@ -91,7 +91,7 @@ class RegistroProduccionController extends Controller
     $result= array();
         //$reg = new stdClass();
         //$Rows = RegistroProduccion::whereRaw("id_hora_dat = ".$id_hour." and dtmfecha_dat = '2014-11-18'")->get();
-    $Rows = DB::select("select
+    $Rows = DB::select("select * from (select
       id_dat,
       dtmfecha_dat,
       strNombre_hora as id_hora_dat,
@@ -122,7 +122,7 @@ class RegistroProduccionController extends Controller
       from tbltaller_reg
       inner join bdideplast.`dbo.tblhoras` on id_hora= id_hora_dat
       inner join bdideplast.`dbo.tblempleado` on id_emp_dat= id_emp
-      where id_hora_dat = ? and dtmfecha_dat = ?
+      where id_hora_dat = ? and dtmfecha_dat = ?) a order by ident,id_dat
       ;",[$id_hour, $fecha, $id_hour, $fecha]);
     foreach ($Rows as $row) {
       $reg =
